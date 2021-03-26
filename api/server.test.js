@@ -89,9 +89,11 @@ describe('[GET] /api/jokes', () => {
     expect(response.body.message).toEqual('token required');
   })
 
-  it('responds with proper message if invalid creds used', async () => {
-    const response = await request(server).post('/api/auth/login').send({ username: "AgentCooper", password: "twin" });
+  it('successfully retrieves jokes with token', async () => {
+    const login = await request(server).post('/api/auth/login').send({ username: "AgentCooper", password: "twinpeaks" });
 
-    expect(response.body.message).toEqual('invalid credentials');
+    const jokes = await request(server).get('/api/jokes').set('Authorization', login.body.token);
+
+    expect(jokes.body).toHaveLength(3);
   })
 })
