@@ -2,6 +2,9 @@ const User = require('../auth/auth-model');
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../secrets');
 
+/*=========================
+Check for User Registration
+==========================*/
 const checkUsernameUnique = async (req, res, next) => {
     const { username } = req.body;
 
@@ -18,6 +21,10 @@ const checkUsernameUnique = async (req, res, next) => {
         });
 };
 
+/*=================
+Check User Payloads
+==================*/
+
 const checkPayload = (req, res, next) => {
     const { username, password } = req.body;
 
@@ -27,6 +34,10 @@ const checkPayload = (req, res, next) => {
         next();
     }
 }
+
+/*===================
+Check for User Login
+====================*/
 
 const checkUserInDb = async (req, res, next) => {
     const { username } = req.body;
@@ -44,6 +55,10 @@ const checkUserInDb = async (req, res, next) => {
             res.status(500).json(`Server error: ${err}`);
         });
 };
+
+/*========================
+Reuseable Token Generation
+=========================*/
 
 const makeToken = (user) => {
     const payload = {

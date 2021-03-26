@@ -21,10 +21,6 @@ afterAll(async () => {
   await db.destroy();
 });
 
-// it('process.env.DB_ENV must be "testing"', () => {
-//   expect(process.env.DB_ENV).toBe('testing');
-// })
-
 // Write your tests here
 test('sanity', () => {
   expect(true).toBe(true)
@@ -36,21 +32,22 @@ auth/register Tests
 
 
 describe('[POST] api/auth/register', () => {
-  const user = { username: "AgentCooper", password: "twinpeaks" };
-  const user2 = { username: "Bob", password: "twinpeaks" };
   
   it('correctly registers new user to DB', async () => {
-  
+    const user = { username: "AgentCooper", password: "twinpeaks" };
+    
     const response = await request(server).post('/api/auth/register').send(user);
-
+    
     const expected = { id: 1, username: "AgentCooper" };
-
+    
     expect(response.body).toMatchObject(expected);
-
+    
     expect(response.status).toBe(201);
   })
-
+  
   it('returns a user with bcrypted password', async() => {
+    const user2 = { username: "Bob", password: "twinpeaks" };
+    
     const response = await request(server).post('/api/auth/register').send(user2);
 
     await User.findById(response.body.id)
